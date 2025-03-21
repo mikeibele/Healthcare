@@ -46,7 +46,6 @@ const PatientDashboard = () => {
 
   const fetchUserProfile = async () => {
     if (!user) return;
-    
     try {
       const { data, error } = await supabase
         .from('user_profiles')
@@ -54,7 +53,7 @@ const PatientDashboard = () => {
         .eq('user_id', user.id)
         .maybeSingle();
 
-      if (error && error.code !== 'PGRST116') throw error;
+      if (error) throw error;
       if (data) {
         setUserProfile(data);
         setFormData(data);
@@ -67,6 +66,7 @@ const PatientDashboard = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
+    console.log("Save button clicked, submitting form...", formData);
 
     try {
       const { data, error } = await supabase
@@ -80,7 +80,7 @@ const PatientDashboard = () => {
         .single();
 
       if (error) throw error;
-      
+      console.log("Profile updated successfully", data);
       setUserProfile(data);
       setIsEditing(false);
     } catch (error) {
